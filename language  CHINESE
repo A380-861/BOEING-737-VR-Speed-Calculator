@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>737 VR速度计算器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #1a2980;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: #26d0ce;
+        }
+        
+        .subtitle {
+            color: #555;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .note {
+            background-color: #f0f8ff;
+            border-left: 4px solid #1a2980;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+        
+        .note i {
+            color: #1a2980;
+            margin-right: 8px;
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-group h2 {
+            color: #1a2980;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-row {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            border-color: #26d0ce;
+            outline: none;
+        }
+        
+        .wind-info {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .wind-info span {
+            background-color: #e8f4f8;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .results-section {
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-section h2 {
+            color: #1a2980;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .aircraft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .aircraft-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid #1a2980;
+            transition: transform 0.3s;
+        }
+        
+        .aircraft-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .aircraft-card h3 {
+            color: #1a2980;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .vr-speed {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #26d0ce;
+            margin: 15px 0;
+        }
+        
+        .unit {
+            font-size: 1rem;
+            color: #777;
+            font-weight: normal;
+        }
+        
+        .details {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .details div {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .calculate-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .aircraft-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-plane"></i> 737 VR速度计算器</h1>
+            <p class="subtitle">输入风速和襟翼角度，获取不同737机型的VR速度（抬头速度）</p>
+        </header>
+        
+        <div class="note">
+            <p><i class="fas fa-info-circle"></i> 本计算器基于满载条件（最大起飞重量）计算VR速度。风速为逆风分量，顺风请使用负值。计算结果仅供参考，实际飞行中请参考官方飞行手册。</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <h2><i class="fas fa-wind"></i> 环境条件</h2>
+                
+                <div class="input-row">
+                    <label for="wind">风速（节）</label>
+                    <input type="number" id="wind" value="10" min="-50" max="50" step="1">
+                    <div class="wind-info">
+                        <span>正数 = 逆风</span>
+                        <span>负数 = 顺风</span>
+                        <span>0 = 无风</span>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label for="flap">襟翼角度</label>
+                    <select id="flap">
+                        <option value="1">1°</option>
+                        <option value="5" selected>5°</option>
+                        <option value="10">10°</option>
+                        <option value="15">15°</option>
+                        <option value="20">20°</option>
+                        <option value="25">25°</option>
+                        <option value="30">30°</option>
+                    </select>
+                </div>
+                
+                <button class="calculate-btn" id="calculate">
+                    <i class="fas fa-calculator"></i> 计算VR速度
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <h2><i class="fas fa-plane-departure"></i> 机型说明</h2>
+                
+                <div class="details">
+                    <div><strong>737-600</strong> <span>典型座位: 110-132</span></div>
+                    <div><strong>737-700</strong> <span>典型座位: 126-149</span></div>
+                    <div><strong>737-800</strong> <span>典型座位: 162-189</span></div>
+                    <div><strong>737 MAX 8</strong> <span>典型座位: 162-178</span></div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; color: #1a2980; margin-bottom: 10px;">计算原理</h3>
+                    <p style="font-size: 0.9rem; color: #555;">
+                        VR速度计算基于：
+                        <br>1. 各机型满载基准VR速度
+                        <br>2. 襟翼角度修正（襟翼越大，VR越小）
+                        <br>3. 风速修正（逆风减少VR，顺风增加VR）
+                        <br>4. 假设标准大气条件，跑道干燥
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <h2><i class="fas fa-tachometer-alt"></i> 计算结果</h2>
+            <div class="aircraft-grid" id="results">
+                <!-- 结果将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 737 VR速度计算器 | 本工具仅用于培训和教育目的 | 实际飞行请参考官方飞行手册</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 各机型的基准VR速度（满载，襟翼5°，无风条件）
+            const baseVrSpeeds = {
+                '737-600': { base: 138, weight: 65.5, units: '吨' },
+                '737-700': { base: 142, weight: 70.1, units: '吨' },
+                '737-800': { base: 146, weight: 79.0, units: '吨' },
+                '737MAX8': { base: 144, weight: 82.2, units: '吨' }
+            };
+            
+            // 襟翼修正系数（相对于襟翼5°）
+            const flapCorrections = {
+                1: 8,   // 襟翼1°时VR增加8节
+                5: 0,   // 襟翼5°为基准
+                10: -4, // 襟翼10°时VR减少4节
+                15: -8,
+                20: -12,
+                25: -16,
+                30: -20
+            };
+            
+            // 风速修正系数（每节逆风减少0.1节VR，每节顺风增加0.1节VR）
+            const windCorrectionFactor = 0.1;
+            
+            // 初始计算
+            calculateVrSpeeds();
+            
+            // 为计算按钮添加事件监听
+            document.getElementById('calculate').addEventListener('click', calculateVrSpeeds);
+            
+            // 为输入框添加输入事件监听，实现实时计算
+            document.getElementById('wind').addEventListener('input', calculateVrSpeeds);
+            document.getElementById('flap').addEventListener('change', calculateVrSpeeds);
+            
+            function calculateVrSpeeds() {
+                // 获取用户输入
+                const windInput = document.getElementById('wind');
+                const wind = parseFloat(windInput.value) || 0;
+                
+                const flapSelect = document.getElementById('flap');
+                const flap = parseInt(flapSelect.value);
+                
+                // 获取结果容器
+                const resultsContainer = document.getElementById('results');
+                resultsContainer.innerHTML = '';
+                
+                // 计算并显示每种机型的VR速度
+                for (const [aircraft, data] of Object.entries(baseVrSpeeds)) {
+                    // 基础VR速度
+                    let vrSpeed = data.base;
+                    
+                    // 应用襟翼修正
+                    vrSpeed += flapCorrections[flap];
+                    
+                    // 应用风速修正（逆风减少VR，顺风增加VR）
+                    vrSpeed -= wind * windCorrectionFactor;
+                    
+                    // 确保VR速度不低于最小值
+                    vrSpeed = Math.max(vrSpeed, data.base - 25);
+                    
+                    // 创建飞机卡片
+                    const card = document.createElement('div');
+                    card.className = 'aircraft-card';
+                    
+                    // 设置卡片内容
+                    card.innerHTML = `
+                        <h3>${aircraft}</h3>
+                        <div class="vr-speed">${vrSpeed.toFixed(0)}<span class="unit"> 节</span></div>
+                        <div class="details">
+                            <div><span>基准VR:</span> <span>${data.base} 节</span></div>
+                            <div><span>最大重量:</span> <span>${data.weight} ${data.units}</span></div>
+                            <div><span>襟翼修正:</span> <span>${flapCorrections[flap] >= 0 ? '+' : ''}${flapCorrections[flap]} 节</span></div>
+                            <div><span>风速修正:</span> <span>${wind * windCorrectionFactor >= 0 ? '+' : ''}${(-wind * windCorrectionFactor).toFixed(1)} 节</span></div>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(card);
+                }
+                
+                // 更新风速显示说明
+                const windInfo = document.querySelector('.wind-info');
+                if (wind > 0) {
+                    windInfo.innerHTML = `<span style="background-color:#d1ecf1; color:#0c5460;">逆风 ${wind} 节</span>`;
+                } else if (wind < 0) {
+                    windInfo.innerHTML = `<span style="background-color:#f8d7da; color:#721c24;">顺风 ${Math.abs(wind)} 节</span>`;
+                } else {
+                    windInfo.innerHTML = `<span style="background-color:#e2e3e5; color:#383d41;">无风</span>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
