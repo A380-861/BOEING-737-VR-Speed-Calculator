@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>737 VR Speed Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #1a2980;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: #26d0ce;
+        }
+        
+        .subtitle {
+            color: #555;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .instructions {
+            background-color: #f0f8ff;
+            border-left: 4px solid #1a2980;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+        
+        .instructions i {
+            color: #1a2980;
+            margin-right: 8px;
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-group h2 {
+            color: #1a2980;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-row {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            border-color: #26d0ce;
+            outline: none;
+        }
+        
+        .wind-info {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .wind-info span {
+            background-color: #e8f4f8;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .results-section {
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-section h2 {
+            color: #1a2980;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .aircraft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .aircraft-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid #1a2980;
+            transition: transform 0.3s;
+        }
+        
+        .aircraft-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .aircraft-card h3 {
+            color: #1a2980;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .vr-speed {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #26d0ce;
+            margin: 15px 0;
+        }
+        
+        .unit {
+            font-size: 1rem;
+            color: #777;
+            font-weight: normal;
+        }
+        
+        .details {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .details div {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .calculate-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .aircraft-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-plane"></i> 737 VR Speed Calculator</h1>
+            <p class="subtitle">Enter wind speed and flap setting to get VR speeds for different 737 models</p>
+        </header>
+        
+        <div class="instructions">
+            <p><i class="fas fa-info-circle"></i> <strong>How to use this calculator:</strong></p>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li>Enter wind speed in knots (positive for headwind, negative for tailwind)</li>
+                <li>Select flap setting from the dropdown menu (default is 5°)</li>
+                <li>Click "Calculate VR Speed" or simply change any input value</li>
+                <li>Read the calculated VR (rotation) speeds for each 737 model</li>
+            </ol>
+            <p style="margin-top: 10px;"><i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> This calculator assumes maximum takeoff weight (MTOW) conditions. Results are for reference only. Always consult official flight manuals for actual flight operations.</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <h2><i class="fas fa-wind"></i> Environmental Conditions</h2>
+                
+                <div class="input-row">
+                    <label for="wind">Wind Speed (knots)</label>
+                    <input type="number" id="wind" value="10" min="-50" max="50" step="1">
+                    <div class="wind-info">
+                        <span>Positive = Headwind</span>
+                        <span>Negative = Tailwind</span>
+                        <span>0 = No wind</span>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label for="flap">Flap Setting</label>
+                    <select id="flap">
+                        <option value="1">1°</option>
+                        <option value="5" selected>5°</option>
+                        <option value="10">10°</option>
+                        <option value="15">15°</option>
+                        <option value="20">20°</option>
+                        <option value="25">25°</option>
+                        <option value="30">30°</option>
+                    </select>
+                </div>
+                
+                <button class="calculate-btn" id="calculate">
+                    <i class="fas fa-calculator"></i> Calculate VR Speed
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <h2><i class="fas fa-plane-departure"></i> Aircraft Information</h2>
+                
+                <div class="details">
+                    <div><strong>737-600</strong> <span>Typical seating: 110-132</span></div>
+                    <div><strong>737-700</strong> <span>Typical seating: 126-149</span></div>
+                    <div><strong>737-800</strong> <span>Typical seating: 162-189</span></div>
+                    <div><strong>737 MAX 8</strong> <span>Typical seating: 162-178</span></div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; color: #1a2980; margin-bottom: 10px;">Calculation Method</h3>
+                    <p style="font-size: 0.9rem; color: #555;">
+                        VR speed calculation is based on:
+                        <br>1. Base VR speed for each model at MTOW
+                        <br>2. Flap setting correction (higher flaps = lower VR)
+                        <br>3. Wind correction (headwind reduces VR, tailwind increases VR)
+                        <br>4. Assumes standard atmospheric conditions and dry runway
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Calculated Results</h2>
+            <div class="aircraft-grid" id="results">
+                <!-- Results will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 737 VR Speed Calculator | This tool is for training and educational purposes only | For actual flight operations, always refer to official flight manuals</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Base VR speeds for each aircraft (MTOW, flaps 5°, no wind)
+            const baseVrSpeeds = {
+                '737-600': { base: 138, weight: 65.5, units: 'tons' },
+                '737-700': { base: 142, weight: 70.1, units: 'tons' },
+                '737-800': { base: 146, weight: 79.0, units: 'tons' },
+                '737MAX8': { base: 144, weight: 82.2, units: 'tons' }
+            };
+            
+            // Flap correction factors (relative to flaps 5°)
+            const flapCorrections = {
+                1: 8,   // VR increases by 8 knots with flaps 1°
+                5: 0,   // Flaps 5° is the baseline
+                10: -4, // VR decreases by 4 knots with flaps 10°
+                15: -8,
+                20: -12,
+                25: -16,
+                30: -20
+            };
+            
+            // Wind correction factor (each knot of headwind reduces VR by 0.1 knots)
+            const windCorrectionFactor = 0.1;
+            
+            // Initial calculation
+            calculateVrSpeeds();
+            
+            // Add event listeners
+            document.getElementById('calculate').addEventListener('click', calculateVrSpeeds);
+            document.getElementById('wind').addEventListener('input', calculateVrSpeeds);
+            document.getElementById('flap').addEventListener('change', calculateVrSpeeds);
+            
+            function calculateVrSpeeds() {
+                // Get user inputs
+                const windInput = document.getElementById('wind');
+                const wind = parseFloat(windInput.value) || 0;
+                
+                const flapSelect = document.getElementById('flap');
+                const flap = parseInt(flapSelect.value);
+                
+                // Get results container
+                const resultsContainer = document.getElementById('results');
+                resultsContainer.innerHTML = '';
+                
+                // Calculate and display VR speed for each aircraft
+                for (const [aircraft, data] of Object.entries(baseVrSpeeds)) {
+                    // Base VR speed
+                    let vrSpeed = data.base;
+                    
+                    // Apply flap correction
+                    vrSpeed += flapCorrections[flap];
+                    
+                    // Apply wind correction (headwind reduces VR, tailwind increases VR)
+                    vrSpeed -= wind * windCorrectionFactor;
+                    
+                    // Ensure VR speed doesn't go below minimum
+                    vrSpeed = Math.max(vrSpeed, data.base - 25);
+                    
+                    // Create aircraft card
+                    const card = document.createElement('div');
+                    card.className = 'aircraft-card';
+                    
+                    // Set card content
+                    card.innerHTML = `
+                        <h3>${aircraft}</h3>
+                        <div class="vr-speed">${vrSpeed.toFixed(0)}<span class="unit"> knots</span></div>
+                        <div class="details">
+                            <div><span>Base VR:</span> <span>${data.base} knots</span></div>
+                            <div><span>MTOW:</span> <span>${data.weight} ${data.units}</span></div>
+                            <div><span>Flap correction:</span> <span>${flapCorrections[flap] >= 0 ? '+' : ''}${flapCorrections[flap]} knots</span></div>
+                            <div><span>Wind correction:</span> <span>${wind * windCorrectionFactor >= 0 ? '+' : ''}${(-wind * windCorrectionFactor).toFixed(1)} knots</span></div>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(card);
+                }
+                
+                // Update wind info display
+                const windInfo = document.querySelector('.wind-info');
+                if (wind > 0) {
+                    windInfo.innerHTML = `<span style="background-color:#d1ecf1; color:#0c5460;">Headwind ${wind} knots</span>`;
+                } else if (wind < 0) {
+                    windInfo.innerHTML = `<span style="background-color:#f8d7da; color:#721c24;">Tailwind ${Math.abs(wind)} knots</span>`;
+                } else {
+                    windInfo.innerHTML = `<span style="background-color:#e2e3e5; color:#383d41;">No wind</span>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
