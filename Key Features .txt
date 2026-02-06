@@ -1,0 +1,53 @@
+Key Features of the English Version
+Complete English Interface:
+
+All text, labels, buttons, and instructions are in English
+
+Clear step-by-step usage instructions
+
+User-Friendly Instructions:
+
+Clear "How to use this calculator" section with numbered steps
+
+Important notes about the calculator's limitations and purpose
+
+Calculation Details:
+
+"Calculation Method" section explaining how VR speeds are determined
+
+Aircraft information with typical seating capacity
+
+Interactive Features:
+
+Real-time calculation as inputs change
+
+Visual wind indicator showing headwind/tailwind status
+
+Hover effects on aircraft cards for better user experience
+
+Responsive Design:
+
+Works well on both desktop and mobile devices
+
+Adjusts layout based on screen size
+
+How to Use
+Enter wind speed in knots (positive for headwind, negative for tailwind)
+
+Select flap setting from the dropdown menu (default is 5°)
+
+Click "Calculate VR Speed" or simply change any input value
+
+View results for each 737 model showing:
+
+Calculated VR speed in knots
+
+Base VR speed
+
+Maximum Takeoff Weight (MTOW)
+
+Flap correction applied
+
+Wind correction applied
+
+The calculator automatically updates results whenever you change wind speed or flap setting, providing instant feedback for different scenarios.
